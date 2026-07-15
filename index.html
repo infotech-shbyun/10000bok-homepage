@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Bionicle Rebuild — 보유 부품을 체크하고, 다시 만들 수 있는 BIONICLE 세트를 찾아보세요.">
+  <meta name="theme-color" content="#101936">
+  <link rel="icon" href="assets/images/bionicle_rebuild_icon_1024.png">
+  <title>Bionicle Rebuild | 나의 부품으로 다시 만드는 BIONICLE</title>
+  <style>
+    :root {
+      --ink: #101936;
+      --ink-soft: #596987;
+      --paper: #f6f8fe;
+      --blue: #3468eb;
+      --blue-deep: #224dbf;
+      --mint: #73e0c2;
+      --sun: #ffd05a;
+      --line: #dce4f3;
+      --white: #ffffff;
+      --shadow: 0 24px 70px rgba(14, 33, 82, .16);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    a { color: inherit; }
+    .skip-link {
+      position: fixed;
+      left: 1rem;
+      top: -5rem;
+      z-index: 99;
+      padding: .65rem .9rem;
+      border-radius: .5rem;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+    .skip-link:focus { top: 1rem; }
+    .wrap { width: min(1120px, calc(100% - 2.5rem)); margin: 0 auto; }
+
+    .site-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 5;
+      padding: 1.25rem 0;
+      color: var(--white);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .brand { display: inline-flex; align-items: center; gap: .7rem; text-decoration: none; font-weight: 800; letter-spacing: -.03em; font-size: 1.1rem; }
+    .brand-mark {
+      width: 2.15rem;
+      height: 2.15rem;
+      display: grid;
+      place-items: center;
+      border-radius: .72rem;
+      background: linear-gradient(145deg, var(--sun), #ee9f24);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 7px 18px rgba(0,0,0,.2);
+      color: #31230b;
+      font-size: 1.35rem;
+    }
+    .nav-links { display: flex; align-items: center; gap: 1.5rem; font-size: .92rem; }
+    .nav-links a { color: rgba(255,255,255,.82); text-decoration: none; }
+    .nav-links a:hover, .nav-links a:focus-visible { color: var(--white); }
+    .nav-cta {
+      padding: .52rem .83rem;
+      border: 1px solid rgba(255,255,255,.5);
+      border-radius: 999px;
+      color: var(--white) !important;
+    }
+
+    .hero {
+      overflow: hidden;
+      position: relative;
+      min-height: 710px;
+      padding: 9.4rem 0 3rem;
+      background:
+        radial-gradient(circle at 70% 13%, rgba(91, 218, 198, .33), transparent 18rem),
+        radial-gradient(circle at 14% 88%, rgba(78, 107, 243, .45), transparent 24rem),
+        linear-gradient(132deg, #0c1430 0%, #172b65 57%, #224d99 100%);
+      color: var(--white);
+      isolation: isolate;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      right: -7rem;
+      bottom: -8rem;
+      width: 29rem;
+      height: 29rem;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 48% 52% 62% 38%;
+      transform: rotate(18deg);
+    }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, .95fr) minmax(355px, .8fr); align-items: center; gap: 3rem; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      padding: .35rem .65rem;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      color: #d7fff5;
+      font-size: .76rem;
+      font-weight: 750;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: "✦"; color: var(--sun); }
+    h1 { max-width: 10ch; margin: 1.1rem 0 .95rem; font-size: clamp(3.05rem, 7.1vw, 5.7rem); line-height: .94; letter-spacing: -.075em; }
+    .hero-copy { max-width: 31rem; margin: 0; color: rgba(255,255,255,.8); font-size: 1.08rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.8rem; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 3.1rem;
+      padding: .75rem 1.05rem;
+      border: 1px solid transparent;
+      border-radius: .85rem;
+      font: inherit;
+      font-weight: 780;
+      text-decoration: none;
+      transition: transform .2s ease, background .2s ease;
+    }
+    .button:hover { transform: translateY(-2px); }
+    .button-primary { background: var(--sun); color: #302402; box-shadow: 0 12px 24px rgba(0,0,0,.2); }
+    .button-quiet { border-color: rgba(255,255,255,.36); color: var(--white); background: rgba(255,255,255,.07); }
+    .microcopy { margin: .95rem 0 0; color: rgba(255,255,255,.55); font-size: .78rem; }
+
+    .hero-art { min-height: 445px; position: relative; }
+    .orbit { position: absolute; border: 1px solid rgba(255,255,255,.15); border-radius: 50%; }
+    .orbit-one { width: 22rem; height: 22rem; top: 1.3rem; left: 2.1rem; }
+    .orbit-two { width: 31rem; height: 31rem; top: -3rem; left: -2.4rem; border-style: dashed; }
+    .phone {
+      position: absolute;
+      top: .4rem;
+      left: 50%;
+      width: 232px;
+      padding: .55rem;
+      border: 5px solid #0a1024;
+      border-radius: 2.3rem;
+      background: #0a1024;
+      box-shadow: 0 26px 54px rgba(0,0,0,.34), inset 0 0 0 1px rgba(255,255,255,.08);
+      transform: translateX(-50%) rotate(8deg);
+    }
+    .phone::before { content: ""; position: absolute; z-index: 1; top: .66rem; left: 50%; width: 5.3rem; height: 1rem; border-radius: 999px; background: #0a1024; transform: translateX(-50%); }
+    .phone img { display: block; width: 100%; aspect-ratio: 1080 / 2311; border-radius: 1.72rem; object-fit: cover; object-position: center top; }
+    .float-card {
+      position: absolute;
+      right: -1.2rem;
+      bottom: 2.3rem;
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      width: 184px;
+      padding: .8rem .9rem;
+      border: 1px solid rgba(255,255,255,.45);
+      border-radius: 1rem;
+      background: rgba(8, 18, 47, .72);
+      box-shadow: 0 14px 35px rgba(0,0,0,.18);
+      backdrop-filter: blur(10px);
+      color: #fff;
+    }
+    .float-icon { display: grid; place-items: center; flex: 0 0 2.25rem; height: 2.25rem; border-radius: .7rem; background: var(--mint); color: #063c38; font-size: 1.35rem; }
+    .float-card strong, .float-card span { display: block; }
+    .float-card strong { font-size: .86rem; }
+    .float-card span { color: rgba(255,255,255,.68); font-size: .72rem; }
+
+    main { overflow: hidden; }
+    .section { padding: 6.3rem 0; }
+    .section-label { margin: 0 0 .65rem; color: var(--blue); font-size: .78rem; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+    h2 { margin: 0; max-width: 16ch; font-size: clamp(2rem, 4vw, 3.35rem); line-height: 1.05; letter-spacing: -.06em; }
+    .section-intro { max-width: 39rem; margin: 1.2rem 0 0; color: var(--ink-soft); }
+
+    .how { background: var(--white); }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2.5rem; }
+    .step { position: relative; min-height: 235px; padding: 1.35rem; overflow: hidden; border: 1px solid var(--line); border-radius: 1.25rem; background: #fbfcff; }
+    .step-number { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: .8rem; background: #e8efff; color: var(--blue-deep); font-weight: 850; }
+    .step h3 { margin: 2.7rem 0 .6rem; font-size: 1.18rem; letter-spacing: -.035em; }
+    .step p { margin: 0; color: var(--ink-soft); font-size: .92rem; }
+    .step-symbol { position: absolute; right: 1rem; bottom: -.55rem; color: #e5ecfb; font-size: 5.4rem; font-weight: 900; line-height: 1; letter-spacing: -.15em; }
+
+    .screens { color: var(--white); background: var(--ink); }
+    .screens .section-label { color: var(--mint); }
+    .screens .section-intro { color: #aebbd8; }
+    .screen-showcase { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: clamp(1.5rem, 5vw, 4.5rem); margin-top: 2.8rem; }
+    .screen-card { position: relative; margin: 0 auto; width: min(100%, 310px); padding: .55rem; border: 1px solid rgba(255,255,255,.18); border-radius: 2rem; background: #070d20; box-shadow: 0 25px 55px rgba(0,0,0,.4); }
+    .screen-card::after { content: ""; position: absolute; top: .7rem; left: 50%; width: 5.2rem; height: .9rem; border-radius: 9rem; background: #070d20; transform: translateX(-50%); }
+    .screen-card img { display: block; width: 100%; border-radius: 1.52rem; }
+    .screen-card:first-child { transform: rotate(-4deg); }
+    .screen-card:last-child { transform: translateY(2.8rem) rotate(4deg); }
+    .feature-list { display: grid; gap: .85rem; margin: 2rem 0 0; padding: 0; list-style: none; }
+    .feature-list li { display: flex; gap: .7rem; align-items: flex-start; color: #d5def2; }
+    .feature-list li::before { content: "✓"; display: grid; place-items: center; width: 1.35rem; height: 1.35rem; flex: 0 0 1.35rem; margin-top: .1rem; border-radius: 50%; background: rgba(115,224,194,.17); color: var(--mint); font-size: .78rem; font-weight: 900; }
+
+    .data-note { padding: 2.4rem 0 0; background: var(--paper); }
+    .data-note-inner { display: grid; grid-template-columns: auto 1fr; gap: 1.2rem; align-items: center; padding: 1.45rem; border-radius: 1.15rem; background: #e9f4ff; }
+    .data-note-icon { display: grid; place-items: center; width: 3.15rem; height: 3.15rem; border-radius: 1rem; background: var(--blue); color: var(--white); font-size: 1.45rem; }
+    .data-note p { margin: 0; color: #405375; font-size: .94rem; }
+    .data-note strong { color: var(--ink); }
+
+    .privacy { background: var(--paper); }
+    .privacy-head { display: flex; align-items: end; justify-content: space-between; gap: 1.5rem; }
+    .updated { flex: 0 0 auto; margin: 0 0 .35rem; color: var(--ink-soft); font-size: .83rem; }
+    .privacy-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(250px, .72fr); gap: 1.4rem; margin-top: 2.5rem; }
+    .policy { padding: clamp(1.35rem, 4vw, 2.25rem); border: 1px solid var(--line); border-radius: 1.3rem; background: var(--white); box-shadow: 0 10px 35px rgba(22,44,91,.06); }
+    .policy h3 { margin: 1.8rem 0 .55rem; font-size: 1.07rem; letter-spacing: -.025em; }
+    .policy h3:first-child { margin-top: 0; }
+    .policy p, .policy li { color: #50617f; font-size: .93rem; }
+    .policy p { margin: .45rem 0; }
+    .policy ul { display: grid; gap: .45rem; margin: .7rem 0; padding-left: 1.15rem; }
+    .policy a { color: var(--blue-deep); }
+    .policy-side { align-self: start; padding: 1.4rem; border-radius: 1.25rem; background: var(--ink); color: var(--white); }
+    .policy-side h3 { margin: 0 0 .7rem; font-size: 1.15rem; }
+    .policy-side p { margin: 0; color: #b8c6e2; font-size: .9rem; }
+    .policy-side a { display: inline-flex; margin-top: 1rem; color: var(--mint); font-weight: 750; text-decoration-thickness: 1px; text-underline-offset: .25em; }
+    .mini-divider { height: 1px; margin: 1.15rem 0; background: rgba(255,255,255,.14); }
+    .notice { margin-top: 1.4rem !important; padding: .8rem .9rem; border-left: 3px solid var(--sun); border-radius: .3rem; background: #fff8df; color: #725b1e !important; }
+
+    .footer { padding: 2.35rem 0; color: #aab9d5; background: #0a1024; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 1.4rem; align-items: center; }
+    .footer-brand { color: var(--white); font-weight: 800; letter-spacing: -.025em; }
+    .footer p { max-width: 43rem; margin: .35rem 0 0; font-size: .76rem; }
+    .footer a { flex: 0 0 auto; color: var(--white); font-size: .86rem; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; text-underline-offset: .25em; }
+
+    @media (max-width: 760px) {
+      .wrap { width: min(100% - 2rem, 600px); }
+      .nav-links a:not(.nav-cta) { display: none; }
+      .hero { min-height: 0; padding: 7.7rem 0 2.6rem; }
+      .hero-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+      h1 { max-width: 8.5ch; }
+      .hero-art { min-height: 390px; transform: scale(.88); transform-origin: 50% top; margin: -1rem 0 -2.8rem; }
+      .steps, .screen-showcase, .privacy-grid { grid-template-columns: 1fr; }
+      .screen-showcase { gap: .2rem; }
+      .screen-card:last-child { margin-top: -2.1rem; transform: translateX(20%) rotate(4deg); }
+      .screen-card:first-child { margin-left: 5%; }
+      .privacy-head, .footer-inner { align-items: flex-start; flex-direction: column; }
+      .updated { margin: 0; }
+      .section { padding: 4.3rem 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .button { transition: none; }
+      .button:hover { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+
+  <header class="site-header">
+    <div class="wrap nav" aria-label="주요 메뉴">
+      <a class="brand" href="#top" aria-label="Bionicle Rebuild 처음으로">
+        <span class="brand-mark" aria-hidden="true">✦</span>
+        <span>Bionicle Rebuild</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#features">기능</a>
+        <a href="#screens">앱 화면</a>
+        <a href="#privacy">개인정보 처리방침</a>
+        <a class="nav-cta" href="#features">출시 준비 중</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="top" class="hero" aria-labelledby="hero-title">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow">Your parts. Your rebuild.</p>
+          <h1 id="hero-title">다시 만날 BIONICLE을, 내 부품으로.</h1>
+          <p class="hero-copy">Bionicle Rebuild는 보유한 부품을 하나씩 체크하고, 완성에 가까운 BIONICLE 세트를 발견하도록 돕는 컬렉션 앱입니다.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#features">앱 기능 보기</a>
+            <a class="button button-quiet" href="#privacy">개인정보 처리방침</a>
+          </div>
+          <p class="microcopy">Android · Google Play 출시 준비 중</p>
+        </div>
+        <div class="hero-art" aria-label="Bionicle Rebuild 검색 화면 미리보기">
+          <div class="orbit orbit-one" aria-hidden="true"></div>
+          <div class="orbit orbit-two" aria-hidden="true"></div>
+          <div class="phone">
+            <img src=".codex_emulator_screen_after_approve.png" alt="Bionicle Rebuild의 세트 검색 목록 화면">
+          </div>
+          <div class="float-card" aria-hidden="true">
+            <span class="float-icon">✓</span>
+            <span><strong>내 부품 체크</strong><span>완성도를 한눈에</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section how" aria-labelledby="features-title">
+      <div class="wrap">
+        <p class="section-label">Built for rebuilding</p>
+        <h2 id="features-title">흩어진 부품이, 다음 조립의 시작이 됩니다.</h2>
+        <p class="section-intro">찾고, 확인하고, 채워 보세요. 기억 속의 세트부터 새로운 MOC까지, 지금 가진 부품을 기준으로 다음 목표를 정할 수 있습니다.</p>
+        <div class="steps">
+          <article class="step">
+            <span class="step-number">01</span>
+            <h3>세트를 찾아보세요</h3>
+            <p>연도·서브테마·이름으로 BIONICLE 세트와 MOC를 빠르게 탐색합니다.</p>
+            <span class="step-symbol" aria-hidden="true">⌕</span>
+          </article>
+          <article class="step">
+            <span class="step-number">02</span>
+            <h3>내 부품을 체크하세요</h3>
+            <p>필요한 부품과 보유 수량을 비교해 현재 조립 진행도를 확인합니다.</p>
+            <span class="step-symbol" aria-hidden="true">✓</span>
+          </article>
+          <article class="step">
+            <span class="step-number">03</span>
+            <h3>다음 목표를 발견하세요</h3>
+            <p>부족한 부품과 희소도 정보를 보고, 다시 만들 세트를 정해 보세요.</p>
+            <span class="step-symbol" aria-hidden="true">✦</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="screens" class="section screens" aria-labelledby="screens-title">
+      <div class="wrap">
+        <p class="section-label">Inside the app</p>
+        <h2 id="screens-title">찾는 시간은 줄이고, 조립의 즐거움은 남깁니다.</h2>
+        <div class="screen-showcase">
+          <div class="screen-card">
+            <img src=".codex_emulator_screen_after_approve.png" alt="Bionicle Rebuild의 연도와 서브테마 필터, 검색 결과 목록">
+          </div>
+          <div class="screen-card">
+            <img src=".codex_after_weight_reload.png" alt="Bionicle Rebuild의 부품 목록과 보유 수량 체크 화면">
+          </div>
+        </div>
+        <ul class="feature-list" aria-label="주요 기능">
+          <li>세트별 구성 부품과 보유 수량을 같은 화면에서 확인</li>
+          <li>내 컬렉션을 기준으로 부족 부품을 한곳에 정리</li>
+          <li>사진으로 부품을 찾아 관련 BIONICLE 세트를 탐색</li>
+          <li>BrickLink·Rebrickable 등 관련 정보로 바로 이동</li>
+        </ul>
+      </div>
+    </section>
+
+    <aside class="data-note" aria-label="데이터 저장 안내">
+      <div class="wrap data-note-inner">
+        <span class="data-note-icon" aria-hidden="true">⌂</span>
+        <p><strong>내 컬렉션은 내 기기에.</strong> 세트·부품 체크와 보유 수량은 앱의 로컬 저장소에 보관되어, 계정을 만들지 않아도 컬렉션을 관리할 수 있습니다.</p>
+      </div>
+    </aside>
+
+    <section id="privacy" class="section privacy" aria-labelledby="privacy-title">
+      <div class="wrap">
+        <div class="privacy-head">
+          <div>
+            <p class="section-label">Privacy policy</p>
+            <h2 id="privacy-title">개인정보 처리방침</h2>
+          </div>
+          <p class="updated">시행일: 2026년 7월 15일</p>
+        </div>
+        <div class="privacy-grid">
+          <article class="policy">
+            <h3>1. 개요</h3>
+            <p>Bionicle Rebuild(이하 “앱”)는 사용자가 보유한 BIONICLE 부품과 세트를 관리하고, 부품 정보를 탐색하도록 돕는 독립 팬 앱입니다. 이 방침은 앱을 이용할 때 처리될 수 있는 정보와 그 목적을 설명합니다.</p>
+
+            <h3>2. 앱이 처리하는 정보</h3>
+            <ul>
+              <li><strong>컬렉션 및 부품 체크 정보:</strong> 사용자가 추가한 세트, 보유 부품 수량, 체크 상태는 기기 내 앱 저장소에 보관됩니다. 개발자는 이 정보를 별도의 회원 서버로 전송하거나 계정과 연결하지 않습니다.</li>
+              <li><strong>부품 사진:</strong> 사용자가 사진 검색 기능에서 직접 촬영하거나 선택한 사진은 부품 식별 요청을 위해 Brickognize 서비스로 전송됩니다. 사진 검색은 선택 기능이며, 사용하지 않으면 사진은 전송되지 않습니다. 전송 후 사진의 보관·처리 방식은 Brickognize의 정책을 따릅니다.</li>
+              <li><strong>광고 관련 기술 정보:</strong> 앱에 표시되는 광고는 Google Mobile Ads SDK를 통해 제공될 수 있습니다. 앱은 비개인화 광고 요청 설정을 사용하지만, 광고 제공 과정에서 Google이 기기 식별자, IP 주소, 앱 상호작용 등 기술 정보를 처리할 수 있습니다.</li>
+            </ul>
+
+            <h3>3. 이용 목적</h3>
+            <p>처리된 정보는 컬렉션 저장, 부품 수량 계산, 사진 기반 부품 식별, 앱 기능 제공 및 광고 표시를 위해서만 사용됩니다. 앱은 사용자의 컬렉션 정보를 판매하거나 자체 광고 타기팅 목적으로 이용하지 않습니다.</p>
+
+            <h3>4. 제3자 서비스 및 외부 링크</h3>
+            <p>앱은 기능 제공을 위해 다음 서비스와 연결될 수 있습니다. 각 서비스에서 처리하는 정보와 보관 기간에는 해당 서비스의 개인정보 처리방침이 적용됩니다.</p>
+            <ul>
+              <li><a href="https://brickognize.com/terms-of-service/" target="_blank" rel="noopener noreferrer">Brickognize 이용약관</a> — 사용자가 선택한 부품 사진의 인식 요청</li>
+              <li><a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google / Google Mobile Ads</a> — 광고 제공 및 측정</li>
+              <li>Rebrickable, Brickset, BrickLink — 세트·부품 정보 조회 및 사용자가 선택한 외부 링크 이동</li>
+            </ul>
+
+            <h3>5. 저장 기간 및 삭제</h3>
+            <p>기기에 저장된 컬렉션과 부품 체크 정보는 사용자가 앱 내에서 삭제하거나 앱을 제거할 때까지 기기에 남을 수 있습니다. 사진 검색을 위해 제3자 서비스에 전송한 사진의 보관·삭제 정책은 해당 서비스의 정책을 따릅니다.</p>
+
+            <h3>6. 권한</h3>
+            <p>카메라와 사진 보관함 접근 권한은 사용자가 사진 검색 기능을 사용할 때에만 요청됩니다. 권한을 허용하지 않아도 세트 검색, 컬렉션 관리, 부품 체크 등 다른 핵심 기능을 이용할 수 있습니다.</p>
+
+            <h3>7. 아동의 개인정보</h3>
+            <p>앱은 만 13세 미만 아동의 개인정보를 의도적으로 수집하지 않습니다. 보호자는 의심되는 정보 제공이 있을 경우 아래의 개발자 연락처로 문의할 수 있습니다.</p>
+
+            <h3>8. 문의 및 변경</h3>
+            <p>개인정보 관련 문의, 열람·삭제 요청은 Google Play 스토어의 앱 페이지에 표시된 개발자 연락처로 보내 주세요. 본 방침은 기능 또는 적용 법령의 변경에 따라 갱신될 수 있으며, 변경 시 이 페이지의 시행일을 업데이트합니다.</p>
+            <p class="notice">출시 전 Google Play의 Data safety 항목은 실제 배포 버전에 포함된 광고 SDK, 사진 검색 및 외부 서비스 설정에 맞춰 최종 확인해야 합니다.</p>
+          </article>
+
+          <aside class="policy-side">
+            <h3>한눈에 보는 약속</h3>
+            <p>컬렉션 정보는 기본적으로 사용자 기기에 저장됩니다. 사진 검색을 누를 때에만 선택한 사진이 부품 인식 서비스로 전송됩니다.</p>
+            <div class="mini-divider"></div>
+            <p>본 앱은 LEGO Group, Rebrickable, BrickLink 또는 Brickset과 제휴하거나 보증받지 않은 독립 팬 프로젝트입니다.</p>
+            <a href="#top">맨 위로 돌아가기 ↑</a>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div>
+        <div class="footer-brand">✦ Bionicle Rebuild</div>
+        <p>BIONICLE 및 LEGO는 LEGO Group의 상표입니다. 본 앱과 웹사이트는 독립 팬 프로젝트이며 LEGO Group의 공식 제품이 아닙니다.</p>
+      </div>
+      <a href="#privacy">개인정보 처리방침</a>
+    </div>
+  </footer>
+</body>
+</html>
